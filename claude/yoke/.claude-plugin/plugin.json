@@ -1,0 +1,11 @@
+{
+  "name": "yoke",
+  "version": "0.12.0",
+  "description": "Skills for building an application with Yoke: the concepts and the command line, a Plugin in any of five languages, and an interface client.",
+  "author": {
+    "name": "The Yoke project"
+  },
+  "homepage": "https://docs.yoke-project.dev/",
+  "repository": "https://github.com/yoke-project/yoke-ai-skill",
+  "license": "CC-BY-4.0"
+}
