@@ -66,6 +66,6 @@
 | **Method** | check |
 | **Not applicable in** | — |
 | **Label** | blocking |
-| **Precondition** | programs listing `yoke app run`, `yoke unit ask` and `yoke shell`, and `yoke-compose` listing `check` and `add unit`; a skill citing in blocks of code and in spans `yoke app run --from hello`, `echo -n x \| yoke unit ask a b`, `yoke app`, `yoke shell`, `yoke <subject> <operation>`, `yoke-compose add unit g`, `yoke-compose check`, then `yoke unit command a b` and `yoke-compose add channel c` |
+| **Precondition** | programs listing `yoke app run`, `yoke unit ask` and `yoke shell`, and `yoke-compose` listing `check` and `add unit`; a skill citing in blocks of code and in spans `yoke app run --from hello`, a pipe into `yoke unit ask a b`, `yoke app`, `yoke shell`, `yoke <subject> <operation>`, `yoke-compose add unit g`, `yoke-compose check`, then `yoke unit command a b` and `yoke-compose add channel c` |
 | **Action** | check the skill's commands against the programs |
 | **Expected** | it exits 1 naming `yoke unit command` and `yoke-compose add channel`, and none of the others |
