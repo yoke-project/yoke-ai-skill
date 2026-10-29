@@ -58,6 +58,7 @@ develop floor="" verify="":
     fi
     bash ci/yoke-verify.sh "{{verify}}"
 
-# Publish into this repository's ecosystem, one manifest line per publication.
+# Publish into this repository's ecosystem, one manifest line per publication: at a release tag, the tree
+# at the tag, once the skills hold against that release's documentation and programs.
 release:
-    @echo "release: nothing to publish from yoke-ai-skill yet"
+    @bash ci/release.sh
