@@ -1,0 +1,29 @@
+# Every proposed change runs this repository's own verbs, from a clean checkout.
+# Every command is a verb, or a script under ci/.
+name: verify
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: extractions/setup-just@v4
+        with:
+          just-version: 1.58.0
+      - run: just develop
+      - run: just build
+      - run: just lint
+      - run: just fmt
+      - run: just test
+      - run: ci/record.sh > record.json
+        if: always()
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: record-L1
+          path: record.json
