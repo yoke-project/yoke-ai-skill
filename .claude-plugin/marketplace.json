@@ -1,0 +1,15 @@
+{
+  "name": "yoke",
+  "owner": {
+    "name": "The Yoke project"
+  },
+  "description": "Skills for building an application with Yoke: the concepts and the command line, a Plugin in any of five languages, and an interface client.",
+  "plugins": [
+    {
+      "name": "yoke",
+      "source": "./claude/yoke",
+      "description": "Skills for building an application with Yoke: the concepts and the command line, a Plugin in any of five languages, and an interface client.",
+      "version": "0.12.0"
+    }
+  ]
+}

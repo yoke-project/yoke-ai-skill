@@ -11,12 +11,27 @@ release they describe, and everything else links to it.
 The repository is tagged with every release of Yoke, at Yoke's own number: the skills at a tag describe
 that release and link to its pages.
 
+**In Claude Code**, add the marketplace this repository is and install the plugin from it:
+
+```
+/plugin install yoke --marketplace yoke-project/yoke-ai-skill
+```
+
+**In Antigravity**, copy the folders under `antigravity/` into the workspace's `.agents/skills/`, or into
+`~/.gemini/config/skills/` for every workspace.
+
+Both carry the same three skills, generated from one source; take the tag of the release you run.
+
 ## What is where
 
 | Path | What it holds |
 | --- | --- |
 | `skills/yoke/`, `skills/yoke-plugin/`, `skills/yoke-ui/` | The one source of each skill, a `SKILL.md` whose marked regions are generated and whose rest is written by hand |
 | `ci/essentials.py` | Regenerates the marked regions from the documentation of one release, published or built, and with `--check` says which skill differs |
+| `.claude-plugin/`, `claude/yoke/` | The Claude Code marketplace, and the one plugin it lists — generated |
+| `antigravity/` | The skills as Antigravity's folders — generated |
+| `ci/package.py` | Generates both packages from `skills/`, and with `--check` names every file that differs |
+| `ci/links.py`, `ci/commands.py`, `ci/published.sh` | Check every link a skill holds answers, and every command it cites exists in the release's programs; `ci/published.sh` runs every check against a published release |
 | `checks/`, `ci/` | This repository's own checks, and the scripts continuous integration runs |
 
 ## Working on it
