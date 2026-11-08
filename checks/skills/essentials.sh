@@ -119,3 +119,16 @@ for name in found:
         raise SystemExit(f"{name}: a marker is not closed")
 PY
 }
+
+# std: yoke-ai-skill:essentials.06
+check_a_link_the_site_already_versions_is_versioned_once() {
+  local tmp; tmp="$(mktemp -d)"
+  cp -r "$es_site" "$tmp/site"
+  sed -i 's#href="../other/"#href="/9.9.9/guide/other/"#' "$tmp/site/guide/a-page/index.html"
+  printf '<!-- essentials: guide/a-page#the-verbs table -->\n<!-- essentials end -->\n' > "$tmp/SKILL.md"
+  python3 "$es_root/ci/essentials.py" --version 9.9.9 --site "$tmp/site" "$tmp/SKILL.md" > /dev/null \
+    || { echo "the regeneration failed"; rm -rf "$tmp"; return 1; }
+  grep -q 'https://docs.yoke-project.dev/9.9.9/guide/other/' "$tmp/SKILL.md" \
+    || { echo "the skill reads: $(cat "$tmp/SKILL.md")"; rm -rf "$tmp"; return 1; }
+  rm -rf "$tmp"
+}

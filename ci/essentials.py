@@ -130,7 +130,9 @@ def absolute(link: str, page: str, version: str) -> str:
         return link
     base = PUBLISHED + version + "/" + page + "/"
     if link.startswith("/"):
-        return urllib.parse.urljoin(PUBLISHED + version + "/", link.lstrip("/"))
+        # A page published under its release's path already begins its links from the root with it.
+        path = link.removeprefix("/" + version + "/").lstrip("/")
+        return urllib.parse.urljoin(PUBLISHED + version + "/", path)
     return urllib.parse.urljoin(base, link)
 
 
