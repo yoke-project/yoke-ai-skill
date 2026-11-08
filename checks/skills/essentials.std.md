@@ -69,3 +69,16 @@
 | **Precondition** | the repository's `skills/` |
 | **Action** | read each skill's head |
 | **Expected** | there are exactly `yoke`, `yoke-plugin` and `yoke-ui`, each a `SKILL.md` opening with a head whose `name` is its directory's and whose `description` is not empty; every essentials marker is closed |
+
+## yoke-ai-skill:essentials.06 — a link a published page already versions is versioned once
+
+| Field | Value |
+| --- | --- |
+| **Cites** | prj_structure/97 §The documentation, and the site |
+| **Level** | L1 |
+| **Method** | check |
+| **Not applicable in** | — |
+| **Label** | blocking |
+| **Precondition** | a page built under a release's path, whose links from the site's root already begin with that release |
+| **Action** | regenerate a skill from a table of the page, at that release |
+| **Expected** | the link names the release once |
