@@ -171,8 +171,8 @@ one per operation of the administrative contract: `yoke <subject> <operation> [-
 | Look at | With | It says |
 | --- | --- | --- |
 | the instances | `yoke instance list` | each with its state — `observable`, `stopped`, `refused`, `failed` |
-| the units | `yoke unit list`, `yoke unit show greeter` | each unit's state, its condition, and what its plugin declared and was authorised |
-| the log | `yoke log query --unit greeter`, `yoke log follow` | every event of the instance: states, admissions, grants, a unit's health and occurrences |
+| the units | `yoke unit list`, `yoke unit show clock` | each unit's state, its condition, and what its plugin declared and was authorised |
+| the log | `yoke log query --unit clock`, `yoke log follow` | every event of the instance: states, admissions, grants, a unit's health and occurrences |
 | what the Core publishes | `yoke core subscribe` | a snapshot of the records, then each change as it happens |
 | the guardian | `$XDG_STATE_HOME/yoke/guardian.log` — `~/.local/state/yoke/guardian.log` by default | the gate's findings at a start, and every Core it ran |
 | an interactive session | `yoke shell` | the same operations, typed one after another |
@@ -187,19 +187,20 @@ one per operation of the administrative contract: `yoke <subject> <operation> [-
 
 ## The two forms
 
-<!-- essentials: building/shipping-it table -->
-|  | The application form | The service form |
-| --- | --- | --- |
-| what is delivered | the package, `com.example.hello-0.1.0.yoke` | each Plugin's executable and Manifest, as the distribution's files, and a composition document |
-| who starts it | the account's guardian, through `yoke instance` | the init system, through `yoke service` |
-| where it fits | a laboratory host, a workstation, anything an account administers | a device that starts with nobody present |
+<!-- essentials: plugins-and-applications/an-application-as-a-service table -->
+| The application form | The service form |
+| --- | --- |
+| `yoke.yaml`, inside a bundle, written by the author | a **composition document**, `/etc/yoke/deployments/<name>.yaml`, written for one host |
+| the Plugins' executables and Manifests, inside the bundle | each Plugin's executable at `/usr/lib/yoke/plugins/<plugin>` and its Manifest in `/etc/yoke/plugins.d/<plugin>/`, delivered by the Plugin's own package |
+| parameters, chosen when an instance is created | none: a composition carries the site's values written in, as literals |
+| an instance record, written by the manager | none: the init system's unit is the only desired state |
 <!-- essentials end -->
 
 In the service form there is no package: a distribution installs each Plugin's Manifest under
 `/etc/yoke/plugins.d/<plugin>/manifest.yaml` and its executable at `/usr/lib/yoke/plugins/<plugin>`, the
 administrator writes the composition under `/etc/yoke/deployments/` and links `/etc/yoke/deployment.yaml`
 to it, and `yoke service check`, `start` and `status` act on it. A device built with the Yocto Project
-takes Yoke's layer, `meta-yoke`: https://docs.yoke-project.dev/0.12.0/integrating/an-image/.
+takes Yoke's layer, `meta-yoke`: https://docs.yoke-project.dev/0.12.0/setting-up/embedded-device/.
 
 ## A Core on another host
 

@@ -8,7 +8,7 @@ description: Use when writing a Yoke Plugin — a program the Core launches and 
 A Plugin is a program the **Core** launches, admits and holds a **Session** with. It declares what it does
 in its **Manifest** — the commands it accepts, the questions it answers, the streams and occurrences it
 reports, and a capability governing each — and does nothing it has not declared. This skill is written for
-Yoke 0.12.0; read https://docs.yoke-project.dev/0.12.0/building/a-plugin/ and the plugin surface's
+Yoke 0.12.0; read https://docs.yoke-project.dev/0.12.0/building-a-plugin/ and the plugin surface's
 reference, https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/admission/, before relying on it.
 
 ## The rules that explain most surprises
@@ -83,9 +83,26 @@ occurrence needs a capability governing it, and the name of a capability is the 
 that the Manifest declares it and an operator grants it
 (https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/capabilities/).
 
+## Starting one
+
+A Plugin is a project of its own, made from its family's template. The template comes from the composer's
+own release, so the composer and the library were released together:
+
+```
+yoke-compose new plugin com.example.greeter --language go
+```
+
+`--language` is `go`, `rust`, `c` or `cpp`. Python has no template in this release: a Python Plugin is
+started by hand, as the end of each page of
+https://docs.yoke-project.dev/0.12.0/building-a-plugin/starting-it/ shows. A composer built from source is
+no release's and refuses: name one with `--release <version>`, or an archive with `--template <file>`.
+
+The project holds `yoke-plugin.yaml`, which states the build and no version; `plugin/`, the source and the
+Manifest; and `try/`, the smallest application around it.
+
 ## A Plugin, in Go
 
-<!-- essentials: building/a-plugin#the-program code:go -->
+<!-- essentials: building-a-plugin/the-program code:go -->
 ```go
 // Command greeter is a Plugin that answers one question: who it is greeting.
 package main
@@ -112,7 +129,7 @@ func declaration() plugin.Declaration {
 
 func main() {
 	// The Manifest is generated from the declaration, so the two cannot disagree.
-	if len(os.Args) == 2 && os.Args[1] == "manifest" {
+	if len(os.Args) == 2 && os.Args[1] == "--manifest" {
 		os.Stdout.Write(declaration().Manifest())
 		return
 	}
@@ -144,20 +161,24 @@ func main() {
 ```
 <!-- essentials end -->
 
-<!-- essentials: building/a-plugin#the-program table -->
+<!-- essentials: building-a-plugin/the-program#what-each-part-does table -->
 | Part | What it does |
 | --- | --- |
-| `plugin.Declaration` | the identity and the four declared lists, each object governed by a capability — [the Manifest](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/the-manifest/), [capabilities](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/capabilities/) |
-| `plugin.Start` | reads what the Core handed the process at launch, registers, and opens the Session — [what a unit arrives with](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/what-a-unit-arrives-with/), [the Session](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/the-session/) |
-| `u.Health` | the first health report; liveness is reports arriving on the interval the Core assigned — [the families](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/the-families/) |
-| `u.Events()` | what the Core sends: a `plugin.Question` to answer, a `plugin.Command` to acknowledge |
-| `u.Answer` | the answer, correlated to its question; the payload is the Plugin's own bytes |
-| `u.Close`, `u.Done` | an orderly end of the Session when the Core asks the process to stop |
+| **the declaration** | the identity, the question the Plugin answers, and the capability that governs it. Everything a Plugin may be asked or may send is declared, and each object is governed by exactly one capability ([the Manifest](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/the-manifest/), [capabilities](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/capabilities/)) |
+| **`--manifest`** | prints the Manifest the declaration generates. The program is the only source of it, so the file shipped beside the program cannot disagree with what the program registers |
+| **the start** | reads what the Core handed the process at launch, binds the unit's own socket, registers, and opens the Session. A refusal is returned or thrown, and nothing is tried again ([what a unit arrives with](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/what-a-unit-arrives-with/), [admission](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/admission/)) |
+| **the first health report** | a grade on the scale an event's severity uses, 0 to 99 and higher more serious, and a line for a person. The library repeats the last report at every beat and sends none before the first, so a Plugin that never reports loses its liveness and is ended ([the families](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/the-families/)) |
+| **the events** | what the Core sends, in the order it sent it: a question to answer, a command to acknowledge, a stream to start or stop, a refusal, and the end of the Session |
+| **the answer** | correlated to its question by the library. The payload is the Plugin's own bytes: the Core carries it and never reads it |
+| **the close** | on `SIGTERM`, the Core's way of asking a unit to stop: the Plugin closes the Session, waits for its end, and exits. A unit still running when the deployment's stop window has passed is killed ([the Session](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/the-session/)) |
 <!-- essentials end -->
 
+From the Plugin project, the composer runs the build `yoke-plugin.yaml` states, and leaves the executable
+in `build/<arch>/`. The Manifest is kept in the source, printed by the program:
+
 ```
-CGO_ENABLED=0 go build -o greeter .
-./greeter manifest > com.example.greeter.yaml
+yoke-compose build
+build/x86_64/greeter --manifest > plugin/com.example.greeter.yaml
 ```
 
 A command arrives as an event too, and is acknowledged — accepted, done or failed; an acknowledgement
@@ -167,7 +188,7 @@ has activated it, and stops when the Core stops it
 
 ## In another language
 
-<!-- essentials: building/a-plugin#in-another-language table -->
+<!-- essentials: plugins-and-applications/a-plugin#the-declaration-in-five-languages table -->
 | Family | The library | A Plugin imports |
 | --- | --- | --- |
 | Go | the module `github.com/yoke-project/yoke-sdk-go` | `plugin` |
@@ -194,25 +215,40 @@ report:
 `github.com/yoke-project/yoke-reference` holds a clock written as a Plugin in Go, Rust and Python, each
 against its published library: start from the one in your language.
 
-## Into a project, and running
+## Trying it, and handing it on
+
+`try/` is an application that takes the Plugin, and it holds the program the template wrote. After replacing
+that program, take the new one in its place, from `try/`:
 
 ```
-mkdir -p hello/components/plugins
-cp greeter/greeter hello/components/plugins/greeter
-cp greeter/com.example.greeter.yaml hello/manifests/
-yoke-compose add unit greeter --dir hello --kind plugin --plugin com.example.greeter \
-  --exec components/plugins/greeter
-yoke-compose check --dir hello
-yoke app run --from hello
+yoke-compose remove units.greeter
+rm components/plugins/greeter manifests/com.example.greeter.yaml
+yoke-compose add plugin ..
+```
+
+Taking a Plugin runs its author's build, so the composer shows the source, the commit and the command, and
+asks. Then, from the Plugin project, run it, grant what it declared, and ask it:
+
+```
+yoke app run --from try
 yoke plugin grant com.example.greeter query.hello.answer
 yoke unit restart greeter
 echo -n world | yoke unit ask greeter greeter.hello --input -
+```
+
+A Plugin is published as its source, at a tag `vX.Y.Z`, and the tag is its version. An application takes it
+by the repository and the tag, and `try/` never travels with it:
+
+```
+yoke-compose add plugin <repository url>@v0.1.0
+yoke-compose update plugin com.example.greeter --to v0.2.0
 ```
 
 The yoke skill covers the rest of the project and the command line.
 
 ## Where the depth is
 
+- Building a Plugin, every step in each language: https://docs.yoke-project.dev/0.12.0/building-a-plugin/
 - The plugin surface: https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/what-a-unit-arrives-with/
 - The Session, health and liveness: https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/the-session/
 - Every page, with a line each: https://docs.yoke-project.dev/0.12.0/llms.txt

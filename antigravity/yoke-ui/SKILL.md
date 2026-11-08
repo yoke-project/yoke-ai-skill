@@ -38,7 +38,8 @@ https://docs.yoke-project.dev/0.12.0/reference/interface-surface/channels/, befo
 
 <!-- essentials: building/an-interface-client#the-program code:go -->
 ```go
-// Command ask is an interface client: it attaches to a channel of a running instance and asks one question.
+// Command ask is an interface client: it attaches to a channel of a running instance, asks one unit one
+// question, and prints the answer.
 package main
 
 import (
@@ -51,14 +52,19 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 4 {
-		fmt.Fprintln(os.Stderr, "usage: ask <instance> <channel> <name>")
+	if len(os.Args) != 5 && len(os.Args) != 6 {
+		fmt.Fprintln(os.Stderr, "usage: ask <instance> <channel> <unit> <question> [<payload>]")
 		os.Exit(2)
+	}
+	instance, channel, unit, question := os.Args[1], os.Args[2], os.Args[3], os.Args[4]
+	var payload []byte
+	if len(os.Args) == 6 {
+		payload = []byte(os.Args[5])
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	// In an application instance a channel's socket derives from the instance's name.
-	address, err := iface.Application(os.Args[1], os.Args[2], os.Getenv)
+	address, err := iface.Application(instance, channel, os.Getenv)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "ask:", err)
 		os.Exit(1)
@@ -69,7 +75,7 @@ func main() {
 		os.Exit(1)
 	}
 	defer a.Close()
-	answer, err := a.Ask(ctx, "greeter", "greeter.hello", []byte(os.Args[3]))
+	answer, err := a.Ask(ctx, unit, question, payload)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "ask:", err)
 		os.Exit(1)
