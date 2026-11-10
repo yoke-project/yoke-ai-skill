@@ -53,9 +53,9 @@
 | **Method** | check |
 | **Not applicable in** | — |
 | **Label** | blocking |
-| **Precondition** | a build of a set holding one page with a section; a skill linking that page, its section, a section it does not have, a page the set does not have, and a command's URL holding a shell variable |
+| **Precondition** | a build of a set holding one page with a section; a skill linking that page, its section, a section it does not have, a page the set does not have, a command's URL holding a shell variable, and a Plugin's repository named at a tag |
 | **Action** | check the skill's links against the build |
-| **Expected** | it exits 1 naming the missing section and the missing page, and neither the page, nor its section, nor the command's URL |
+| **Expected** | it exits 1 naming the missing section and the missing page, and neither the page, nor its section, nor the command's URL, nor a repository named at a tag as a Plugin is taken, `<repository>@<tag>`, which is a command's argument |
 
 ## yoke-ai-skill:the-packages.05 — every command a skill cites exists in the release's programs
 

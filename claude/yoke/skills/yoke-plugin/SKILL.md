@@ -8,8 +8,8 @@ description: Use when writing a Yoke Plugin — a program the Core launches and 
 A Plugin is a program the **Core** launches, admits and holds a **Session** with. It declares what it does
 in its **Manifest** — the commands it accepts, the questions it answers, the streams and occurrences it
 reports, and a capability governing each — and does nothing it has not declared. This skill is written for
-Yoke 0.12.0; read https://docs.yoke-project.dev/0.12.0/building-a-plugin/ and the plugin surface's
-reference, https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/admission/, before relying on it.
+Yoke 0.13.0; read https://docs.yoke-project.dev/0.13.0/building-a-plugin/ and the plugin surface's
+reference, https://docs.yoke-project.dev/0.13.0/reference/plugin-surface/admission/, before relying on it.
 
 ## The rules that explain most surprises
 
@@ -81,7 +81,7 @@ capabilities:
 An unknown key is refused at any level, never ignored. Every declared stream, command, query and
 occurrence needs a capability governing it, and the name of a capability is the author's: what matters is
 that the Manifest declares it and an operator grants it
-(https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/capabilities/).
+(https://docs.yoke-project.dev/0.13.0/reference/plugin-surface/capabilities/).
 
 ## Starting one
 
@@ -94,7 +94,7 @@ yoke-compose new plugin com.example.greeter --language go
 
 `--language` is `go`, `rust`, `c` or `cpp`. Python has no template in this release: a Python Plugin is
 started by hand, as the end of each page of
-https://docs.yoke-project.dev/0.12.0/building-a-plugin/starting-it/ shows. A composer built from source is
+https://docs.yoke-project.dev/0.13.0/building-a-plugin/starting-it/ shows. A composer built from source is
 no release's and refuses: name one with `--release <version>`, or an archive with `--template <file>`.
 
 The project holds `yoke-plugin.yaml`, which states the build and no version; `plugin/`, the source and the
@@ -164,13 +164,13 @@ func main() {
 <!-- essentials: building-a-plugin/the-program#what-each-part-does table -->
 | Part | What it does |
 | --- | --- |
-| **the declaration** | the identity, the question the Plugin answers, and the capability that governs it. Everything a Plugin may be asked or may send is declared, and each object is governed by exactly one capability ([the Manifest](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/the-manifest/), [capabilities](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/capabilities/)) |
+| **the declaration** | the identity, the question the Plugin answers, and the capability that governs it. Everything a Plugin may be asked or may send is declared, and each object is governed by exactly one capability ([the Manifest](https://docs.yoke-project.dev/0.13.0/reference/plugin-surface/the-manifest/), [capabilities](https://docs.yoke-project.dev/0.13.0/reference/plugin-surface/capabilities/)) |
 | **`--manifest`** | prints the Manifest the declaration generates. The program is the only source of it, so the file shipped beside the program cannot disagree with what the program registers |
-| **the start** | reads what the Core handed the process at launch, binds the unit's own socket, registers, and opens the Session. A refusal is returned or thrown, and nothing is tried again ([what a unit arrives with](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/what-a-unit-arrives-with/), [admission](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/admission/)) |
-| **the first health report** | a grade on the scale an event's severity uses, 0 to 99 and higher more serious, and a line for a person. The library repeats the last report at every beat and sends none before the first, so a Plugin that never reports loses its liveness and is ended ([the families](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/the-families/)) |
+| **the start** | reads what the Core handed the process at launch, binds the unit's own socket, registers, and opens the Session. A refusal is returned or thrown, and nothing is tried again ([what a unit arrives with](https://docs.yoke-project.dev/0.13.0/reference/plugin-surface/what-a-unit-arrives-with/), [admission](https://docs.yoke-project.dev/0.13.0/reference/plugin-surface/admission/)) |
+| **the first health report** | a grade on the scale an event's severity uses, 0 to 99 and higher more serious, and a line for a person. The library repeats the last report at every beat and sends none before the first, so a Plugin that never reports loses its liveness and is ended ([the families](https://docs.yoke-project.dev/0.13.0/reference/plugin-surface/the-families/)) |
 | **the events** | what the Core sends, in the order it sent it: a question to answer, a command to acknowledge, a stream to start or stop, a refusal, and the end of the Session |
 | **the answer** | correlated to its question by the library. The payload is the Plugin's own bytes: the Core carries it and never reads it |
-| **the close** | on `SIGTERM`, the Core's way of asking a unit to stop: the Plugin closes the Session, waits for its end, and exits. A unit still running when the deployment's stop window has passed is killed ([the Session](https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/the-session/)) |
+| **the close** | on `SIGTERM`, the Core's way of asking a unit to stop: the Plugin closes the Session, waits for its end, and exits. A unit still running when the deployment's stop window has passed is killed ([the Session](https://docs.yoke-project.dev/0.13.0/reference/plugin-surface/the-session/)) |
 <!-- essentials end -->
 
 From the Plugin project, the composer runs the build `yoke-plugin.yaml` states, and leaves the executable
@@ -182,9 +182,13 @@ build/x86_64/greeter --manifest > plugin/com.example.greeter.yaml
 ```
 
 A command arrives as an event too, and is acknowledged — accepted, done or failed; an acknowledgement
-carries no result, since a result is an answer to a question. A stream is published only once the Core
+carries no result, since a result is an answer to a question. **A question the Plugin cannot answer is
+failed, never answered with an error dressed as a payload**: the unit answers it with an error carrying
+a code and a message in its own terms, and the caller is refused with `unit.failed` carrying them — Go `u.Fail(q.ID,
+code, message)`, Rust `unit.fail(&q.id, code, message).await`, C `yoke_fail`, C++ `unit.fail`. The Python
+family has no such act yet. A stream is published only once the Core
 has activated it, and stops when the Core stops it
-(https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/streams-and-transports/).
+(https://docs.yoke-project.dev/0.13.0/reference/plugin-surface/streams-and-transports/).
 
 ## In another language
 
@@ -205,11 +209,11 @@ report:
 <!-- essentials: reference/the-libraries/what-each-family-offers table -->
 | Family | Version | Plugin library | Interface library | Administrative library |
 | --- | --- | --- | --- | --- |
-| Go | 0.6.1 | 16 cells, all pass | 7 cells, all pass | 6 cells, all pass |
-| Rust | 0.5.0 | 16 cells, all pass | 7 cells, all pass | — |
+| Go | 0.7.0 | 16 cells, all pass | 7 cells, all pass | 6 cells, all pass |
+| Rust | 0.6.0 | 16 cells, all pass | 7 cells, all pass | — |
 | Python | 0.5.0 | 16 cells, all pass | 7 cells, all pass | — |
-| C | 0.6.0 | 16 cells, all pass | 7 cells, all pass | — |
-| C++ | 0.7.0 | 16 cells, all pass | 7 cells, all pass | — |
+| C | 0.7.0 | 16 cells, all pass | 7 cells, all pass | — |
+| C++ | 0.8.0 | 16 cells, all pass | 7 cells, all pass | — |
 <!-- essentials end -->
 
 `github.com/yoke-project/yoke-reference` holds a clock written as a Plugin in Go, Rust and Python, each
@@ -218,16 +222,15 @@ against its published library: start from the one in your language.
 ## Trying it, and handing it on
 
 `try/` is an application that takes the Plugin, and it holds the program the template wrote. After replacing
-that program, take the new one in its place, from `try/`:
+that program, and printing its Manifest again, take the new one in its place, from `try/`:
 
 ```
-yoke-compose remove units.greeter
-rm components/plugins/greeter manifests/com.example.greeter.yaml
-yoke-compose add plugin ..
+yoke-compose update plugin com.example.greeter
 ```
 
-Taking a Plugin runs its author's build, so the composer shows the source, the commit and the command, and
-asks. Then, from the Plugin project, run it, grant what it declared, and ask it:
+A Plugin taken from a path is built from the path again and replaces the two files, the digest and the
+record. Taking a Plugin runs its author's build, so the composer shows the source, the commit and the
+command, and asks. Then, from the Plugin project, run it, grant what it declared, and ask it:
 
 ```
 yoke app run --from try
@@ -248,7 +251,7 @@ The yoke skill covers the rest of the project and the command line.
 
 ## Where the depth is
 
-- Building a Plugin, every step in each language: https://docs.yoke-project.dev/0.12.0/building-a-plugin/
-- The plugin surface: https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/what-a-unit-arrives-with/
-- The Session, health and liveness: https://docs.yoke-project.dev/0.12.0/reference/plugin-surface/the-session/
-- Every page, with a line each: https://docs.yoke-project.dev/0.12.0/llms.txt
+- Building a Plugin, every step in each language: https://docs.yoke-project.dev/0.13.0/building-a-plugin/
+- The plugin surface: https://docs.yoke-project.dev/0.13.0/reference/plugin-surface/what-a-unit-arrives-with/
+- The Session, health and liveness: https://docs.yoke-project.dev/0.13.0/reference/plugin-surface/the-session/
+- Every page, with a line each: https://docs.yoke-project.dev/0.13.0/llms.txt

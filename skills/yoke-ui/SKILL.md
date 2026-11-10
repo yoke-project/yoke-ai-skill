@@ -7,9 +7,9 @@ description: Use when writing a Yoke interface client — a panel on a device, a
 
 An interface client is anything that reaches an application from outside it, and it reaches it through a
 **channel** the application's description declares. It speaks the **interface contract**, and nothing it
-holds gives it administrative reach. This skill is written for Yoke 0.12.0; read
-https://docs.yoke-project.dev/0.12.0/building/an-interface-client/ and the interface surface's reference,
-https://docs.yoke-project.dev/0.12.0/reference/interface-surface/channels/, before relying on it.
+holds gives it administrative reach. This skill is written for Yoke 0.13.0; read
+https://docs.yoke-project.dev/0.13.0/building/an-interface-client/ and the interface surface's reference,
+https://docs.yoke-project.dev/0.13.0/reference/interface-surface/channels/, before relying on it.
 
 <!-- essentials: building/an-interface-client table -->
 |  | A managed interface | An attached client |
@@ -89,8 +89,8 @@ func main() {
 | Call | What it does |
 | --- | --- |
 | `iface.Application` | the channel's socket in an application instance; `iface.Service` is the service form's, `iface.Managed` a managed interface's |
-| `iface.Attach` | attaches, and waits for the opening: what the channel may address and observe — [attaching](https://docs.yoke-project.dev/0.12.0/reference/interface-surface/attaching/) |
-| `a.Ask` | asks a unit a question and returns its answer; `Command`, `Read`, `Subscribe` and the stream calls are the other operations — [the operations](https://docs.yoke-project.dev/0.12.0/reference/interface-surface/the-operations/) |
+| `iface.Attach` | attaches, and waits for the opening: what the channel may address and observe — [attaching](https://docs.yoke-project.dev/0.13.0/reference/interface-surface/attaching/) |
+| `a.Ask` | asks a unit a question and returns its answer; `Command`, `Read`, `Subscribe` and the stream calls are the other operations — [the operations](https://docs.yoke-project.dev/0.13.0/reference/interface-surface/the-operations/) |
 | `a.Close` | ends the attachment in order |
 <!-- essentials end -->
 
@@ -107,9 +107,9 @@ func main() {
 | `query` | a unit and a query type | issues a **query** message on that unit's Session | the unit's answer, correlated, or a refusal |
 | `stream.start` | a unit and a stream | creates the transport, then activates the stream on the Session | the acknowledgement; `unit.stream.activated` follows as an event |
 | `stream.stop` | a unit and a stream | instructs the unit, then removes the transport | the acknowledgement |
-| `stream.subscribe` | a unit and a stream | grants a delivery and creates what carries it | **where the data will arrive** ([streams to clients](https://docs.yoke-project.dev/0.12.0/reference/interface-surface/streams-to-clients/)) |
+| `stream.subscribe` | a unit and a stream | grants a delivery and creates what carries it | **where the data will arrive** ([streams to clients](https://docs.yoke-project.dev/0.13.0/reference/interface-surface/streams-to-clients/)) |
 | `stream.unsubscribe` | a delivery | releases it, and removes what carried it | acknowledged |
-| `reclaim` | the channel | recomputes arbitration in this channel's favour, where it may ([arbitration](https://docs.yoke-project.dev/0.12.0/reference/interface-surface/arbitration/)) | the channel's state after the recomputation |
+| `reclaim` | the channel | recomputes arbitration in this channel's favour, where it may ([arbitration](https://docs.yoke-project.dev/0.13.0/reference/interface-surface/arbitration/)) | the channel's state after the recomputation |
 <!-- essentials end -->
 
 ## The channel it attaches to
@@ -122,7 +122,7 @@ yoke-compose add channel cli --dir hello --transport local --clients multiple
 ```
 
 A channel on a routable address carries TLS and a credential establishing the caller
-(https://docs.yoke-project.dev/0.12.0/reference/interface-surface/a-routable-channel/). In the service form
+(https://docs.yoke-project.dev/0.13.0/reference/interface-surface/a-routable-channel/). In the service form
 a client finds its channel with `iface.Service` instead of `iface.Application`.
 
 ## In another language
@@ -142,7 +142,7 @@ Rust and in Python, and an instrument's panel in C++ with Qt and in C with LVGL.
 
 ## Where the depth is
 
-- Attaching, and what a channel sees: https://docs.yoke-project.dev/0.12.0/reference/interface-surface/attaching/
-- Arbitration: https://docs.yoke-project.dev/0.12.0/reference/interface-surface/arbitration/
-- The interface library: https://docs.yoke-project.dev/0.12.0/reference/the-libraries/the-interface-library/
-- Every page, with a line each: https://docs.yoke-project.dev/0.12.0/llms.txt
+- Attaching, and what a channel sees: https://docs.yoke-project.dev/0.13.0/reference/interface-surface/attaching/
+- Arbitration: https://docs.yoke-project.dev/0.13.0/reference/interface-surface/arbitration/
+- The interface library: https://docs.yoke-project.dev/0.13.0/reference/the-libraries/the-interface-library/
+- Every page, with a line each: https://docs.yoke-project.dev/0.13.0/llms.txt

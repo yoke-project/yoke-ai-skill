@@ -9,7 +9,7 @@
       "name": "yoke",
       "source": "./claude/yoke",
       "description": "Skills for building an application with Yoke: the concepts and the command line, a Plugin in any of five languages, and an interface client.",
-      "version": "0.12.0"
+      "version": "0.13.0"
     }
   ]
 }
