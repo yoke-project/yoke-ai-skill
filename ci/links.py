@@ -3,7 +3,8 @@
 
 Every `http` or `https` link in the files given is asked for, and one that does not answer — or answers
 without the element its `#anchor` names — is named. A link holding a shell variable is a command's, not a
-link, and is left alone.
+link, and is left alone; so is a repository named at a tag, `<repository>@<tag>`, the argument a Plugin is
+taken by.
 
 With --site, a link into the documentation, https://docs.yoke-project.dev/<version>/..., is read from a
 build of the set instead: the page's `index.html` under the directory given, or the file a link with an
@@ -20,6 +21,7 @@ import urllib.error
 import urllib.request
 
 LINK = re.compile(r"https?://[^\s)<>`\"'|]+")
+AT_A_TAG = re.compile(r"@[^/@]+$")
 DOCS = re.compile(r"^https://docs\.yoke-project\.dev/(?:\d+\.\d+\.\d+/)?(.*)$")
 
 
@@ -47,7 +49,7 @@ def main() -> int:
     parser.add_argument("files", nargs="+")
     o = parser.parse_args()
     links = sorted({link.rstrip(".,;:") for f in o.files for link in LINK.findall(pathlib.Path(f).read_text())
-                    if "$" not in link})
+                    if "$" not in link and not AT_A_TAG.search(link)})
     failed = []
     for link in links:
         text, why = page(link, o.site)

@@ -132,3 +132,18 @@ check_a_link_the_site_already_versions_is_versioned_once() {
     || { echo "the skill reads: $(cat "$tmp/SKILL.md")"; rm -rf "$tmp"; return 1; }
   rm -rf "$tmp"
 }
+
+# std: yoke-ai-skill:essentials.07
+check_the_skills_know_the_command_and_the_published_plugins() {
+  local yoke="$es_root/skills/yoke/SKILL.md" plugin="$es_root/skills/yoke-plugin/SKILL.md" each
+  for each in 'yoke-compose add plugin https://github.com/yoke-project/yoke-plugin-system-info@v0.1.0' \
+              'yoke-plugin-system-info' 'yoke-plugin-hw-monitor' 'yoke-plugin-services' \
+              'yoke unit command' 'command.set.accept'; do
+    grep -qF -- "$each" "$yoke" || { echo "the yoke skill does not name $each"; return 1; }
+  done
+  for each in 'yoke-compose update plugin com.example.greeter' 'a code and a message'; do
+    grep -qF -- "$each" "$plugin" || { echo "the yoke-plugin skill does not name $each"; return 1; }
+  done
+  ! grep -qF 'rm components/plugins/greeter' "$plugin" || { echo "the yoke-plugin skill still removes the Plugin by hand"; return 1; }
+  ! grep -qF 'com.yoke.reference.clock' "$yoke" "$plugin" || { echo "a skill still names the clock gathered by hand"; return 1; }
+}

@@ -75,6 +75,7 @@ check_every_link_answers_and_one_that_does_not_is_named() {
 https://docs.yoke-project.dev/9.9.9/guide/here/ and https://docs.yoke-project.dev/9.9.9/guide/here/#there,
 https://docs.yoke-project.dev/9.9.9/guide/here/#nowhere and https://docs.yoke-project.dev/9.9.9/guide/gone/.
 curl -fsSL "https://github.com/yoke-project/yoke/releases/download/v$version/x.tar.gz"
+yoke-compose add plugin https://nowhere.invalid/a-plugin@v9.9.9
 MD
   said="$(python3 "$pk_root/ci/links.py" --site "$tmp/site" "$tmp/SKILL.md")"; status=$?
   rm -rf "$tmp"
