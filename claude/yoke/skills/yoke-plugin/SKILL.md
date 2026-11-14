@@ -209,10 +209,10 @@ report:
 <!-- essentials: reference/the-libraries/what-each-family-offers table -->
 | Family | Version | Plugin library | Interface library | Administrative library |
 | --- | --- | --- | --- | --- |
-| Go | 0.7.0 | 16 cells, all pass | 7 cells, all pass | 6 cells, all pass |
-| Rust | 0.6.0 | 16 cells, all pass | 7 cells, all pass | — |
-| Python | 0.5.0 | 16 cells, all pass | 7 cells, all pass | — |
-| C | 0.7.0 | 16 cells, all pass | 7 cells, all pass | — |
+| Go | 0.8.0 | 16 cells, all pass | 7 cells, all pass | 7 cells, all pass |
+| Rust | 0.7.0 | 16 cells, all pass | 7 cells, all pass | — |
+| Python | 0.6.0 | 16 cells, all pass | 7 cells, all pass | — |
+| C | 0.7.1 | 16 cells, all pass | 7 cells, all pass | — |
 | C++ | 0.8.0 | 16 cells, all pass | 7 cells, all pass | — |
 <!-- essentials end -->
 
