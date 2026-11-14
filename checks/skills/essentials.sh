@@ -147,3 +147,15 @@ check_the_skills_know_the_command_and_the_published_plugins() {
   ! grep -qF 'rm components/plugins/greeter' "$plugin" || { echo "the yoke-plugin skill still removes the Plugin by hand"; return 1; }
   ! grep -qF 'com.yoke.reference.clock' "$yoke" "$plugin" || { echo "a skill still names the clock gathered by hand"; return 1; }
 }
+
+# std: yoke-ai-skill:essentials.08
+check_the_skills_follow_the_corrected_guide() {
+  local yoke="$es_root/skills/yoke/SKILL.md" plugin="$es_root/skills/yoke-plugin/SKILL.md" each
+  ! grep -E '^\| the log \|' "$yoke" | grep -qi 'grant' || { echo "the yoke skill says the log holds grants"; return 1; }
+  grep -qF 'audit record in the Registry' "$yoke" || { echo "the yoke skill does not say where a grant is kept"; return 1; }
+  grep -qF 'await unit.fail(q, code, message)' "$plugin" || { echo "the yoke-plugin skill does not name Python's act"; return 1; }
+  ! grep -qF 'Python family has no such act' "$plugin" || { echo "the yoke-plugin skill still says Python cannot fail"; return 1; }
+  for each in "$es_root"/skills/*/SKILL.md; do
+    ! grep -qF '0.13.0' "$each" || { echo "$(basename "$(dirname "$each")") still names 0.13.0"; return 1; }
+  done
+}
