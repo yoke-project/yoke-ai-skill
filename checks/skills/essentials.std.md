@@ -95,3 +95,16 @@
 | **Precondition** | the repository's `skills/` |
 | **Action** | read the `yoke` and `yoke-plugin` skills |
 | **Expected** | the `yoke` skill takes a Plugin by its repository and its tag, naming `yoke-compose add plugin https://github.com/yoke-project/yoke-plugin-system-info@v0.1.0`, names the project's published Plugins `system-info`, `hw-monitor` and `services`, and sends a command with `yoke unit command`, granting `command.set.accept` first; the `yoke-plugin` skill takes a changed Plugin again from `try/` with `yoke-compose update plugin com.example.greeter` and no longer removes it by hand, and says a unit fails a question or a command with a code and a message; neither names a clock gathered by hand. A skill read beside 0.13.0 thus teaches what 0.13.0 adds |
+
+## yoke-ai-skill:essentials.08 — the skills follow the corrected guide
+
+| Field | Value |
+| --- | --- |
+| **Cites** | prj_structure/97 §The documentation, and the site · arch/45-events/06 §Durable counterparts |
+| **Level** | L1 |
+| **Method** | check |
+| **Not applicable in** | — |
+| **Label** | blocking |
+| **Precondition** | the repository's `skills/` |
+| **Action** | read every skill |
+| **Expected** | the `yoke` skill's row for the log names no grant, and it says a grant is kept as an audit record in the Registry, as the guide was corrected to say; the `yoke-plugin` skill names Python's act of failing a question, `await unit.fail(q, code, message)`, and no longer says the family lacks it; no skill names 0.13.0. A skill read beside 0.14.0 thus teaches what the guide of 0.14.0 says |
