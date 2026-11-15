@@ -107,4 +107,4 @@
 | **Label** | blocking |
 | **Precondition** | the repository's `skills/` |
 | **Action** | read every skill |
-| **Expected** | the `yoke` skill's row for the log names no grant, and it says a grant is kept as an audit record in the Registry, as the guide was corrected to say; the `yoke-plugin` skill names Python's act of failing a question, `await unit.fail(q, code, message)`, and no longer says the family lacks it; no skill names 0.13.0. A skill read beside 0.14.0 thus teaches what the guide of 0.14.0 says |
+| **Expected** | the `yoke` skill's row for the log names no grant, and it says a grant is kept as an audit record in the Registry, as the guide was corrected to say; the `yoke-plugin` skill names Python's act of failing a question, `await unit.fail(q, code, message)`, and no longer says the family lacks it; no skill names 0.14.0, the release before the one the skills are packaged for. A skill read beside a release thus teaches what the guide of that release says |
