@@ -156,6 +156,6 @@ check_the_skills_follow_the_corrected_guide() {
   grep -qF 'await unit.fail(q, code, message)' "$plugin" || { echo "the yoke-plugin skill does not name Python's act"; return 1; }
   ! grep -qF 'Python family has no such act' "$plugin" || { echo "the yoke-plugin skill still says Python cannot fail"; return 1; }
   for each in "$es_root"/skills/*/SKILL.md; do
-    ! grep -qF '0.13.0' "$each" || { echo "$(basename "$(dirname "$each")") still names 0.13.0"; return 1; }
+    ! grep -qF '0.14.0' "$each" || { echo "$(basename "$(dirname "$each")") still names 0.14.0"; return 1; }
   done
 }
