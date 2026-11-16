@@ -188,7 +188,9 @@ a code and a message in its own terms, and the caller is refused with `unit.fail
 code, message)`, Rust `unit.fail(&q.id, code, message).await`, C `yoke_fail`, C++ `unit.fail`, Python
 `await unit.fail(q, code, message)`. A stream is published only once the Core
 has activated it, and stops when the Core stops it
-(https://docs.yoke-project.dev/0.15.0/reference/plugin-surface/streams-and-transports/).
+(https://docs.yoke-project.dev/0.15.0/reference/plugin-surface/streams-and-transports/). A stream
+whose payload may exceed 1 MiB declares its largest, `max_frame`, in bytes, in the Manifest: at most
+64 MiB, and a larger frame is refused.
 
 ## In another language
 
