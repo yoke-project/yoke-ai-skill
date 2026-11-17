@@ -7,8 +7,8 @@ description: Use when building, composing, running or diagnosing a Yoke applicat
 
 Yoke runs an application made of separate processes — its **units** — under one supervisor, the **Core**,
 and lets panels, browsers and tools reach it through declared **channels**. This skill is written for
-Yoke 0.15.0; its pages are at https://docs.yoke-project.dev/0.15.0/, and an index a program can read is
-https://docs.yoke-project.dev/0.15.0/llms.txt. Read a page there before relying on anything this skill
+Yoke 0.15.1; its pages are at https://docs.yoke-project.dev/0.15.1/, and an index a program can read is
+https://docs.yoke-project.dev/0.15.1/llms.txt. Read a page there before relying on anything this skill
 summarises.
 
 ## The model, in five sentences
@@ -30,7 +30,7 @@ summarises.
 A Linux host on `amd64` or `arm64`; nothing needs root. Two assets of the release:
 
 ```
-version=0.15.0 arch=amd64
+version=0.15.1 arch=amd64
 base=https://github.com/yoke-project/yoke/releases/download/v$version
 mkdir -p ~/yoke/bin && cd ~/yoke/bin
 curl -fsSL "$base/yoke-$version-linux-$arch.tar.gz" | tar -xz yoke yoke-core yoke-guardian yoke-auth
@@ -63,7 +63,7 @@ path, or from its repository at a tag. Taking runs the author's build on this ma
 shows the commit and the command and asks; `--yes` answers for a script.
 
 ```
-yoke-compose init com.example.hello --dir hello --version 0.1.0 --arch x86_64 --core ">=0.15.0"
+yoke-compose init com.example.hello --dir hello --version 0.1.0 --arch x86_64 --core ">=0.15.1"
 cd hello
 yoke-compose add plugin ../greeter
 yoke-compose add plugin https://github.com/yoke-project/yoke-plugin-system-info@v0.1.0
@@ -141,12 +141,12 @@ one per operation of the administrative contract: `yoke <subject> <operation> [-
 <!-- essentials: reference/the-manager/the-command-line#yoke-app table -->
 | Verb | Does | Goes to |
 | --- | --- | --- |
-| `install <package>` | expands a package into a bundle and resolves what it references — [Installing](https://docs.yoke-project.dev/0.15.0/reference/the-package/installing/) | filesystem, engine |
+| `install <package>` | expands a package into a bundle and resolves what it references — [Installing](https://docs.yoke-project.dev/0.15.1/reference/the-package/installing/) | filesystem, engine |
 | `list` | the applications and versions installed, each with its install state | filesystem |
 | `show <id>` | one application: its versions, what each records, which any instance points at | filesystem |
 | `remove <id> [--version <v>]` | removes bundles; refused while any instance points at a version being removed | filesystem |
-| `prune [<id>]` | the one reclaiming verb — [Updating and removal](https://docs.yoke-project.dev/0.15.0/reference/the-manager/updating-and-removal/) | filesystem, engine |
-| `run <id> [--version <v>]`, `run --from <dir>` | creates an ephemeral record and follows the run — [Instances](https://docs.yoke-project.dev/0.15.0/reference/the-manager/instances/#running-an-application-that-was-never-declared) | filesystem, guardian |
+| `prune [<id>]` | the one reclaiming verb — [Updating and removal](https://docs.yoke-project.dev/0.15.1/reference/the-manager/updating-and-removal/) | filesystem, engine |
+| `run <id> [--version <v>]`, `run --from <dir>` | creates an ephemeral record and follows the run — [Instances](https://docs.yoke-project.dev/0.15.1/reference/the-manager/instances/#running-an-application-that-was-never-declared) | filesystem, guardian |
 <!-- essentials end -->
 
 <!-- essentials: reference/the-manager/the-command-line#yoke-instance table -->
@@ -159,7 +159,7 @@ one per operation of the administrative contract: `yoke <subject> <operation> [-
 | `enable <n>`, `disable <n>` | writes autostart — a second field, not the desired state | filesystem |
 | `set-version <n> <v>` | re-points the record at an installed version | filesystem |
 | `set-param <n> <group>.<key> <value>` | replaces one recorded value, checked as at creation | filesystem |
-| `set-secret <n> <secret>` | reads a value without echoing it into the instance's state — [Secrets](https://docs.yoke-project.dev/0.15.0/reference/secrets/how-a-unit-gets-one/) | filesystem, operator projection |
+| `set-secret <n> <secret>` | reads a value without echoing it into the instance's state — [Secrets](https://docs.yoke-project.dev/0.15.1/reference/secrets/how-a-unit-gets-one/) | filesystem, operator projection |
 | `copy <n> <path>`, `restore <path> <n>` | copies a stopped instance's state out, or back in | filesystem |
 | `clear <n>` | removes the state; the instance stays declared | filesystem |
 | `remove <n>` | removes the record and the state together | filesystem |
@@ -236,17 +236,17 @@ In the service form there is no package: a distribution installs each Plugin's M
 `/etc/yoke/plugins.d/<plugin>/manifest.yaml` and its executable at `/usr/lib/yoke/plugins/<plugin>`, the
 administrator writes the composition under `/etc/yoke/deployments/` and links `/etc/yoke/deployment.yaml`
 to it, and `yoke service check`, `start` and `status` act on it. A device built with the Yocto Project
-takes Yoke's layer, `meta-yoke`: https://docs.yoke-project.dev/0.15.0/setting-up/embedded-device/.
+takes Yoke's layer, `meta-yoke`: https://docs.yoke-project.dev/0.15.1/setting-up/embedded-device/.
 
 ## A Core on another host
 
 This release covers a Core on the host the agent works on, in either form. Reaching a Core on another host
 is not covered here: a channel on a routable address carries TLS and a credential
-(https://docs.yoke-project.dev/0.15.0/reference/interface-surface/a-routable-channel/), and the
+(https://docs.yoke-project.dev/0.15.1/reference/interface-surface/a-routable-channel/), and the
 administrative surface is local by construction. A later release of these skills will say how.
 
 ## Where the depth is
 
-- The guide, *Building an application*: https://docs.yoke-project.dev/0.15.0/building/
-- The reference: https://docs.yoke-project.dev/0.15.0/reference/
-- Every page, with a line each: https://docs.yoke-project.dev/0.15.0/llms.txt
+- The guide, *Building an application*: https://docs.yoke-project.dev/0.15.1/building/
+- The reference: https://docs.yoke-project.dev/0.15.1/reference/
+- Every page, with a line each: https://docs.yoke-project.dev/0.15.1/llms.txt
