@@ -375,11 +375,11 @@ report:
 <!-- essentials: reference/the-libraries/what-each-family-offers table -->
 | Family | Version | Plugin library | Interface library | Administrative library |
 | --- | --- | --- | --- | --- |
-| Go | 0.10.0 | 20 cells, all pass | 9 cells, all pass | 7 cells, all pass |
-| Rust | 0.9.0 | 20 cells, all pass | 9 cells, all pass | — |
-| Python | 0.9.0 | 20 cells, all pass | 9 cells, all pass | — |
-| C | 0.9.0 | 20 cells, all pass | 9 cells, all pass | — |
-| C++ | 0.11.0 | 20 cells, all pass | 9 cells, all pass | — |
+| Go | 0.11.0 | 22 cells, all pass | 11 cells, all pass | 7 cells, all pass |
+| Rust | 0.10.0 | 22 cells, all pass | 11 cells, all pass | — |
+| Python | 0.10.0 | 22 cells, all pass | 11 cells, all pass | — |
+| C | 0.10.0 | 22 cells, all pass | 11 cells, all pass | — |
+| C++ | 0.12.0 | 22 cells, all pass | 11 cells, all pass | — |
 <!-- essentials end -->
 
 `github.com/yoke-project/yoke-reference` holds a clock written as a Plugin in Go, Rust and Python, each
